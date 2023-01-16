@@ -1,12 +1,55 @@
 const asyncHandler = require("express-async-handler");
 const Post = require("../models/Post");
+const multer = require("multer");
 
-// @desc    Create a new post
-// @route   POST /api/posts
-// @Access  Private
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter: fileFilter,
+});
+
+// @desc Create a new post
+// @route POST /api/posts
+// @Access Private
 const createPost = asyncHandler(async (req, res) => {
+  const { text, name, avatar, photo } = req.body;
   try {
-    const newPost = await Post.create(req.body);
+    //console.log(text, name, avatar, photo)
+    const newPost = new Post({
+      user: req.user.id,
+      text,
+      name,
+      avatar,
+      photo,
+    });
+    // save the post to the database
+    await newPost.save();
+
+/*     test for seeing if the user has array of posts
+    const userId = req.user.id;
+    const posts = await Post.find({ user: userId });
+    console.log(posts); */
+
     res.status(201).json({ success: true, data: newPost });
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });

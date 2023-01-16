@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
+const upload = require("multer")({ dest: "uploads/" });
+
 const {
   createPost,
   getPosts,
@@ -11,9 +14,9 @@ const {
   addComment,
   deleteComment,
 } = require("../controllers/postController");
-//const verifyJWT = require("../middleware/verifyJWT");
+const verifyJWT = require("../middleware/verifyJWT");
 
-router.post("/", createPost);
+router.post("/", verifyJWT, upload.single("photo"), createPost);
 router.get("/", getPosts);
 router.get("/:id", getPost);
 router.put("/:id", updatePost);

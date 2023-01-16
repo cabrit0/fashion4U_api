@@ -23,6 +23,8 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 app.use("/api/v1/users", require("./routes/userRoutes"));
+app.use("/api/v1/posts", require("./routes/postRoutes"));
+app.use("/api/v1/comments", require("./routes/commentRoutes"));
 
 app.all("*", (req, res) => {
   res.status(404);
