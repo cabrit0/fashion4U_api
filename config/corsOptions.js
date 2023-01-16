@@ -1,8 +1,15 @@
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://fitness-api.onrender.com",
-  "https://fitness4u-n7f4.onrender.com",
-  "https://www.google.com",
-]; // colocar url do frontend quando deploy
+const allowedOrigins = require("./allowedOrigins");
 
-module.exports = allowedOrigins;
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+module.exports = corsOptions;
