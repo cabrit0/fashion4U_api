@@ -8,13 +8,13 @@ const {
   changePassword,
   deleteProfile,
 } = require("../controllers/userController");
-//const verifyJWT = require("../middleware/verifyJWT");
+const verifyJWT = require("../middleware/verifyJWT");
 
 router.post("/register", register);
 router.post("/login", login);
-router.get("/profile", getProfile);
-router.put("/profile", updateProfile);
-router.put("/password", changePassword);
-router.delete("/profile", deleteProfile);
+router.get("/profile", verifyJWT, getProfile);
+router.put("/profile", verifyJWT, updateProfile);
+router.put("/password", verifyJWT, changePassword);
+router.delete("/profile", verifyJWT, deleteProfile);
 
 module.exports = router;

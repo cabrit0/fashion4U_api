@@ -27,6 +27,17 @@ const register = asyncHandler(async (req, res) => {
     user.password = await bcrypt.hash(password, salt);
     // Save user to db
     await user.save();
+    // Create and sign JWT
+    const payload = { user: { id: user.id } };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token, user });
+      }
+    );
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -54,6 +65,17 @@ const login = asyncHandler(async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid email or password" });
     }
+    // Create and sign JWT
+    const payload = { user: { id: user.id } };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token, user });
+      }
+    );
   } catch (err) {
     res.status(500).send("Server error");
   }
@@ -82,13 +104,13 @@ const getProfile = asyncHandler(async (req, res) => {
 const updateProfile = asyncHandler(async (req, res) => {
   try {
     // (req.body.id, req.body)    just to test (send the user or user.id in the frontend)
-    const user = await User.findByIdAndUpdate(req.body.id, req.body, {
+    const user = await User.findByIdAndUpdate(req.user.id, req.body, {
       new: true,
     }).select("-password");
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
-    //make logic for updating the user
+    //make inputs for updating the user then complete this
     res.json(user);
   } catch (err) {
     console.error(err.message);
