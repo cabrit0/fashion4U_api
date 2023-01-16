@@ -1,0 +1,12 @@
+ x   userController.js - For handling user-related routes such as registration, login, profile updates, etc.
+ x   postController.js - For handling post-related routes such as creating, viewing, and deleting posts, etc.
+ x   commentController.js - For handling comment-related routes such as creating, viewing, and deleting comments, etc.
+    followController.js - For handling follow-related routes such as following and unfollowing users.
+    likeController.js - For handling like-related routes such as liking and unliking posts.
+    brandController.js - For handling brand-related routes such as creating, viewing and updating brand.
+    storeController.js - For handling store-related routes such as creating, viewing and updating store.
+    messageController.js - For handling messages-related routes such as sending, viewing and deleting messages.
+
+
+
+    tanta coisa! x'D ... maybe more

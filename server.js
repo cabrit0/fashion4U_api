@@ -5,6 +5,7 @@ const path = require("path");
 const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 const { logger, logEvents } = require("./middleware/logger");
+const errorHandler = require("./middleware/errorHandler");
 const connectDB = require("./config/dbConn");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
@@ -21,6 +22,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
+app.use("/api/v1/users", require("./routes/userRoutes"));
 
 app.all("*", (req, res) => {
   res.status(404);
